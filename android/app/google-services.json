@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "348071406294",
+    "project_id": "begabung-351b0",
+    "storage_bucket": "begabung-351b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348071406294:android:af2ca3d838c3592c257777",
+        "android_client_info": {
+          "package_name": "com.carlospherraz.begabungapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxlkhp-ZPM16bS9fbvDV7uE5JIX1VhuI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

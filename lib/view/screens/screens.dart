@@ -1,0 +1,16 @@
+export 'package:begabung_app/view/screens/notificaciones.dart';
+export 'package:begabung_app/view/screens/init.dart';
+export 'package:begabung_app/view/screens/sesiones_admin.dart';
+export 'package:begabung_app/view/screens/home_admin.dart';
+export 'package:begabung_app/view/screens/grupo.dart';
+export 'package:begabung_app/view/screens/evaluaciones_profesional.dart';
+export 'package:begabung_app/view/screens/sesiones_profesional.dart';
+export 'package:begabung_app/view/screens/home_profesional.dart';
+export 'package:begabung_app/view/screens/evaluacion.dart';
+export 'package:begabung_app/view/screens/home.dart';
+export 'package:begabung_app/view/screens/evaluaciones.dart';
+export 'package:begabung_app/view/screens/mensajes.dart';
+export 'package:begabung_app/view/screens/hijos.dart';
+export 'package:begabung_app/view/screens/sesiones.dart';
+export 'package:begabung_app/view/screens/login.dart';
+export 'package:begabung_app/view/screens/mantenimiento.dart';
