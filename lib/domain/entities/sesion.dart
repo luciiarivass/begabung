@@ -28,9 +28,6 @@ class Sesion {
       objetivos = json['objetivos'];
     }
     fecha = json['fecha'];
-
-    // La API a veces devuelve la cadena "null" en lugar de null real
-    // Necesitamos detectar esto y tratarlo como null
     var nombreGrupoValue = json['nombreGrupo'];
     if (nombreGrupoValue != null && nombreGrupoValue.toString() != 'null') {
       grupo = nombreGrupoValue.toString().trim();

@@ -136,17 +136,31 @@ class __LoginFormState extends State<_LoginForm> {
                 try {
                   login = await login.login(user, password);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-                      content: Text("Error login: $e"),
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Error login: $e"),
                   ));
                 }
                 if (login.mantenimiento) {
                   GoRouter.of(context).go('/mantenimiento');
+                } else if (login.admin || login.auxiliar) {
+                  // ← PRIMERO ADMIN/AUX
+                  const storage = FlutterSecureStorage();
+                  await storage.write(key: 'apikey', value: login.apikey);
+                  await storage.write(
+                      key: 'id', value: login.idlogin.toString());
+                  await storage.write(
+                      key: 'is_auxiliar', value: login.auxiliar ? '1' : '0');
+
+                  context.read<ProfesionalProvider>().clearInfo();
+                  context.read<AdminProvider>().getInfo();
+
+                  GoRouter.of(context).go('/home_admin');
                 } else if (login.idprofesional != 0) {
                   const storage = FlutterSecureStorage();
                   await storage.write(key: 'apikey', value: login.apikey);
                   await storage.write(
                       key: 'id', value: login.idlogin.toString());
+
                   context.read<ProfesionalProvider>().clearInfo();
                   context
                       .read<ProfesionalProvider>()
@@ -165,23 +179,15 @@ class __LoginFormState extends State<_LoginForm> {
                   await _initFirebaseMessaging(context, login, alumnos[0])
                       .catchError((e) {
                     print('Error al inicializar Firebase Messaging: $e');
-                  });
-                  /*if (alumnos.length == 1) {
+                    /*if (alumnos.length == 1) {
                     context
                         .read<AlumnoProvider>()
                         .getInfo(alumnos[0].idalumno ?? 0);
                     GoRouter.of(context).go('/home');
                   } else {
                     alumnoProvider.hermanos = true;*/
-                  GoRouter.of(context).go('/hijos', extra: alumnos);
-                  //}
-                } else if (login.admin) {
-                  const storage = FlutterSecureStorage();
-                  await storage.write(key: 'apikey', value: login.apikey);
-                  await storage.write(
-                      key: 'id', value: login.idlogin.toString());
-                  context.read<AdminProvider>().getInfo();
-                  GoRouter.of(context).go('/home_admin');
+                    GoRouter.of(context).go('/hijos', extra: alumnos);
+                  });
                 }
               },
               child: const Text('Entrar',
@@ -222,8 +228,7 @@ class __LoginFormState extends State<_LoginForm> {
 
     FirebaseMessaging.instance.subscribeToTopic("sede_${alumno.idsede}");
     FirebaseMessaging.instance.subscribeToTopic('todos');
-    var url = Uri.parse(
-        '${Api.base}/api/3/apikeyes/${login.idlogin}');
+    var url = Uri.parse('${Api.base}/api/3/apikeyes/${login.idlogin}');
     await http
         .put(url, headers: {'Token': login.apikey!}, body: {'token': token});
   }

@@ -10,30 +10,48 @@ class AdminProvider extends ChangeNotifier {
   List<Grupo> grupos = [];
   List<Evaluacion> evaluaciones = [];
 
+  bool loading = false;
+  String? error;
+
   Future<void> getInfo() async {
     const storage = FlutterSecureStorage();
     String? apikey = await storage.read(key: 'apikey');
-    await getSesiones(apikey);
-    //await completarSesiones(apikey);
 
+    loading = true;
+    error = null;
     notifyListeners();
+
+    try {
+      await getSesiones(apikey);
+    } catch (e) {
+      error = e.toString();
+      sesiones = [];
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 
   void clearInfo() {
-    sesiones = []; // Limpia las sesiones
-    notifyListeners(); // Notificar a los listeners que se ha limpiado la información
+    sesiones = [];
+    error = null;
+    loading = false;
+    notifyListeners();
   }
 
   Future<void> getSesiones(String? apikey) async {
     var url = Uri.parse('${Api.base}/api/3/sesionesporid');
     var response = await http.get(url, headers: {'Token': apikey!});
+
     if (response.statusCode == 200) {
       final registros = json.decode(response.body);
       sesiones = registros.map<Sesion>((row) => Sesion.fromJson(row)).toList();
     } else {
-      throw 'No se han encontrado sesiones para el grupo';
+      throw 'Error ${response.statusCode}: ${response.body}';
     }
   }
+}
+
   // Future<void> getSesiones(String? apikey) async {
   //   var url =
   //       Uri.parse('https://begabung.es/gestion/api/3/sesiones?limit=1000');
@@ -79,4 +97,4 @@ class AdminProvider extends ChangeNotifier {
   //     }
   //   }
   // }
-}
+
