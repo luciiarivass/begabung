@@ -47,7 +47,7 @@ class AdminProvider extends ChangeNotifier {
       final registros = json.decode(response.body);
       sesiones = registros.map<Sesion>((row) => Sesion.fromJson(row)).toList();
     } else {
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'No se pudieron cargar las sesiones. Comprueba tu conexión.';
     }
   }
 }

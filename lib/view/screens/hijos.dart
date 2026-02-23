@@ -51,7 +51,7 @@ class _HijosScreenState extends State<HijosScreen> {
     return await Familiaalumno.getAlumnos(int.parse(idfamilia!), apikey!);
   }
 
-  Future<ImageProvider>? _loadImage(String baseUrl) async {
+  Future<ImageProvider> _loadImage(String baseUrl) async {
     final formats = ['jpg', 'jpeg', 'png'];
 
     for (var format in formats) {
@@ -249,7 +249,7 @@ class _HijosScreenState extends State<HijosScreen> {
                                 ),
                               ]),
                         ),
-                        onTap: () async {
+                        onTap: () {
                           context.read<AlumnoProvider>().clearInfo();
                           context
                               .read<AlumnoProvider>()

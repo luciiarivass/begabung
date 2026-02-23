@@ -1,6 +1,7 @@
 import 'package:begabung_app/domain/entities/entities.dart';
 //import 'package:begabung_app/view/providers/admin_provider.dart';
 //import 'package:begabung_app/view/providers/profesional_provider.dart';
+import 'package:begabung_app/view/screens/home_auxiliar.dart';
 import 'package:begabung_app/view/screens/screens.dart';
 import 'package:begabung_app/view/screens/sesion_grupo.dart';
 //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -71,6 +72,11 @@ final appRouter = GoRouter(
       name: HomeAdminScreen.route,
       path: '/home_admin',
       builder: (context, state) => HomeAdminScreen(),
+    ),
+    GoRoute(
+      name: HomeAuxiliarScreen.route,
+      path: '/home_auxiliar',
+      builder: (context, state) => HomeAuxiliarScreen(),
     ),
     GoRoute(
   path: '/sesiones-grupo',

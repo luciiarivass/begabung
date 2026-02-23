@@ -1,3 +1,4 @@
+import 'package:begabung_app/view/providers/auxiliar_provider.dart';
 import 'package:begabung_app/view/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -5,17 +6,17 @@ import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/entities.dart';
 
-class HomeAdminScreen extends StatefulWidget {
-  static const String route = 'home_admin_screen';
+class HomeAuxiliarScreen extends StatefulWidget {
+  static const String route = 'home_auxiliar_screen';
   @override
-  _HomeAdminScreenState createState() => _HomeAdminScreenState();
+  _HomeAuxiliarScreenState createState() => _HomeAuxiliarScreenState();
 }
 
-class _HomeAdminScreenState extends State<HomeAdminScreen> {
+class _HomeAuxiliarScreenState extends State<HomeAuxiliarScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const SesionesAdminScreen(),
+    const SesionesAuxiliarScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -76,10 +77,11 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('==== HomeAuxiliarScreen BUILD ====');
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        title: Text('Begabung'),
+        title: const Text('Begabung'),
         centerTitle: true,
         actions: [
           PopupMenuButton<int>(
@@ -113,21 +115,6 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
         index: _selectedIndex,
         children: _pages,
       ),
-      /*bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Sesiones',s
-          ),
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: 'Evaluaciones',
-          ),*/
-        ],
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-      ),*/
     );
   }
 }

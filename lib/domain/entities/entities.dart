@@ -1,4 +1,5 @@
 export 'package:begabung_app/domain/entities/notificacion.dart';
+export 'package:begabung_app/domain/entities/feedback.dart';
 export 'package:begabung_app/domain/entities/competencia.dart';
 export 'package:begabung_app/domain/entities/grupo.dart';
 export 'package:begabung_app/domain/entities/alumno.dart';

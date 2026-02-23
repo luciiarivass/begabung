@@ -11,10 +11,16 @@ class Alumno {
   Alumno({this.idalumno, this.idfamiliaalumno, this.idgrupo});
 
   Alumno.fromJson(Map<String, dynamic> json) {
-    idalumno = int.parse(json['idalumno']);
-    idfamiliaalumno = int.parse(json['idfamiliaalumno']);
-    idgrupo = int.parse(json['idgrupo']);
-    nombre = json['nombre'];
+    idalumno = _parseInt(json['idalumno']);
+    idfamiliaalumno = _parseInt(json['idfamiliaalumno']);
+    idgrupo = _parseInt(json['idgrupo']);
+    nombre = json['nombre']?.toString() ?? '';
+  }
+
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    return int.tryParse(value.toString());
   }
   Alumno.fromJsonFS(Map<String, dynamic> json) {
     idalumno = json['idalumno'];

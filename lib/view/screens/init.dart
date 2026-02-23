@@ -1,4 +1,5 @@
 import 'package:begabung_app/view/providers/admin_provider.dart';
+import 'package:begabung_app/view/providers/auxiliar_provider.dart';
 import 'package:begabung_app/view/providers/profesional_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -117,21 +118,39 @@ class _InitScreenState extends State<InitScreen> {
 
       if (!mounted) return;
 
+      debugPrint('==== LOGIN DEBUG ====');
       if (login != null) {
+        debugPrint('login.idlogin: ${login.idlogin}');
+        debugPrint('login.idprofesional: ${login.idprofesional}');
+        debugPrint('login.idfamiliaalumno: ${login.idfamiliaalumno}');
+        debugPrint('login.auxiliar: ${login.auxiliar}');
+        debugPrint('login.admin: ${login.admin}');
+        debugPrint('login.mantenimiento: ${login.mantenimiento}');
+
         if (login.mantenimiento) {
+          debugPrint('>>> Redirigiendo a /mantenimiento');
           context.go('/mantenimiento');
         } else if (login.idprofesional != 0) {
+          debugPrint('>>> Redirigiendo a /home_profesional');
           context.read<ProfesionalProvider>().getInfo(login.idprofesional);
           context.go('/home_profesional');
         } else if (login.idfamiliaalumno != 0) {
+          debugPrint('>>> Redirigiendo a /hijos');
           context.go('/hijos');
+        } else if (login.auxiliar == true) {
+          debugPrint('>>> Redirigiendo a /home_auxiliar');
+          context.read<AuxiliarProvider>().getInfo();
+          context.go('/home_auxiliar');
         } else if (login.admin == true) {
+          debugPrint('>>> Redirigiendo a /home_admin');
           context.read<AdminProvider>().getInfo();
           context.go('/home_admin');
         } else {
+          debugPrint('>>> No encaja en ninguna rama, redirigiendo a /login');
           context.go('/login');
         }
       } else {
+        debugPrint('>>> login es null, redirigiendo a /login');
         context.go('/login');
       }
     } catch (e) {

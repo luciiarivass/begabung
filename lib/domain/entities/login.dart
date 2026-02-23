@@ -25,6 +25,10 @@ class Login {
       final registro = json.decode(response.body);
       final registro2 = json.decode(response2.body);
 
+      if (registro is List && registro.isEmpty) {
+        throw 'Usuario o contraseña incorrectos';
+      }
+
       if (registro[0]['apikey'] == password) {
         idlogin = registro[0]['id'];
         this.user = registro[0]['description'];
@@ -35,15 +39,19 @@ class Login {
         auxiliar =
             registro[0]['auxiliar'] == true || registro[0]['auxiliar'] == 1;
 
-        var mant = json.decode(registro2[0]['properties']);
-        mantenimiento = mant['mantenimiento'] == "1" ? true : false;
+        if (registro2 is List && registro2.isNotEmpty) {
+          var mant = json.decode(registro2[0]['properties']);
+          mantenimiento = mant['mantenimiento'] == "1" ? true : false;
+        }
 
         return this;
       } else {
-        throw 'Error ${response.statusCode}: ${response.body}';
+        throw 'Usuario o contraseña incorrectos';
       }
+    } else if (response.statusCode == 401) {
+      throw 'Usuario o contraseña incorrectos';
     } else {
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
     }
   }
 
@@ -66,12 +74,12 @@ class Login {
       admin = registro['admin'] == true || registro['admin'] == 1;
       auxiliar = registro['auxiliar'] == true || registro['auxiliar'] == 1;
 
-      var mant = json.decode(registro2[0]['properties']);
-      mantenimiento = mant['mantenimiento'] == "1" ? true : false;
-
+      if (registro2 is List && registro2.isNotEmpty) {
+        var mant = json.decode(registro2[0]['properties']);
+        mantenimiento = mant['mantenimiento'] == "1" ? true : false;
+      }
       return this;
     } else {
-      print("error3");
       return null;
     }
   }

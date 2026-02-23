@@ -1,6 +1,7 @@
 import 'package:begabung_app/config/router/app_router.dart';
 import 'package:begabung_app/view/providers/admin_provider.dart';
 import 'package:begabung_app/view/providers/alumno_provider.dart';
+import 'package:begabung_app/view/providers/auxiliar_provider.dart';
 import 'package:begabung_app/view/providers/profesional_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_new_badger/flutter_new_badger.dart';
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AlumnoProvider()),
         ChangeNotifierProvider(create: (_) => ProfesionalProvider()),
-        ChangeNotifierProvider(create: (_) => AdminProvider())
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => AuxiliarProvider()),
       ],
       child: MaterialApp.router(
         routerConfig: appRouter,

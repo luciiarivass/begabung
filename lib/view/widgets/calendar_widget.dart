@@ -134,99 +134,103 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             border: Border.all(),
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: _sesionesDelDia[index].profesional.nombre ==
-                                  null
-                              ? ListTile(
-                                  //trailing: const Icon(Icons.arrow_forward_ios),
-                                  title: Text(
-                                      _sesionesDelDia[index].competencia ?? ''),
-                                  subtitle: _sesionesDelDia[index]
-                                              .profesional
-                                              .nombre ==
-                                          null
-                                      ? (palabras.isNotEmpty &&
-                                              palabras.length >= 3)
-                                          ? (palabras.length == 3
-                                              ? Text(
-                                                  '${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _sesionesDelDia[index].profesional.nombre == null
+                                  ? ListTile(
+                                      title: Text(
+                                          _sesionesDelDia[index].competencia ?? ''),
+                                      subtitle: _sesionesDelDia[index]
+                                                  .profesional
+                                                  .nombre ==
+                                              null
+                                          ? (palabras.isNotEmpty &&
+                                                  palabras.length >= 3)
+                                              ? (palabras.length == 3
+                                                  ? Text(
+                                                      '${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  : Text(
+                                                      '${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}'))
                                               : Text(
-                                                  '${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}'))
-                                          : Text(
-                                              '${_sesionesDelDia[index].hora}')
-                                      : _sesionesDelDia[index].grupo != null &&
-                                              palabras.isNotEmpty &&
-                                              palabras.length >= 3
-                                          ? palabras.length == 3
-                                              ? Text(
-                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  '${_sesionesDelDia[index].hora}')
+                                          : _sesionesDelDia[index].grupo != null &&
+                                                  palabras.isNotEmpty &&
+                                                  palabras.length >= 3
+                                              ? palabras.length == 3
+                                                  ? Text(
+                                                      '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  : Text(
+                                                      '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}')
                                               : Text(
-                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}')
-                                          : Text(
-                                              '${_sesionesDelDia[index].profesional.nombre!} - ${_sesionesDelDia[index].hora}'),
-                                  onTap: loading
-                                      ? null
-                                      : () async {
-                                          setState(() => loading = true);
-                                          await context
-                                              .read<ProfesionalProvider>()
-                                              .getEvaluaciones();
-                                          setState(() => loading = false);
+                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${_sesionesDelDia[index].hora}'),
+                                      onTap: loading
+                                          ? null
+                                          : () async {
+                                              setState(() => loading = true);
+                                              await context
+                                                  .read<ProfesionalProvider>()
+                                                  .getEvaluaciones();
+                                              setState(() => loading = false);
 
-                                          final grupo = profesionalProvider
-                                              .grupos
-                                              .firstWhere(
-                                            (grupo) =>
-                                                grupo.idgrupo ==
-                                                _sesionesDelDia[index].idgrupo,
-                                          );
+                                              final grupo = profesionalProvider
+                                                  .grupos
+                                                  .firstWhere(
+                                                (grupo) =>
+                                                    grupo.idgrupo ==
+                                                    _sesionesDelDia[index].idgrupo,
+                                              );
 
-                                          final sesion = _sesionesDelDia[index];
+                                              final sesion = _sesionesDelDia[index];
 
-                                          context.push('/grupo', extra: {
-                                            'grupo': grupo,
-                                            'sesion': sesion,
-                                          });
-                                        },
-                                )
-                              : ExpansionTile(
-                                  //trailing: const Icon(Icons.arrow_forward_ios),
-                                  title: Text(
-                                      _sesionesDelDia[index].competencia ?? ''),
-                                  subtitle: _sesionesDelDia[index]
-                                              .profesional
-                                              .nombre ==
-                                          null
-                                      ? (palabras.isNotEmpty &&
-                                              palabras.length >= 3)
-                                          ? (palabras.length == 3
-                                              ? Text(
-                                                  '${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                              context.push('/grupo', extra: {
+                                                'grupo': grupo,
+                                                'sesion': sesion,
+                                              });
+                                            },
+                                    )
+                                  : ExpansionTile(
+                                      title: Text(
+                                          _sesionesDelDia[index].competencia ?? ''),
+                                      subtitle: _sesionesDelDia[index]
+                                                  .profesional
+                                                  .nombre ==
+                                              null
+                                          ? (palabras.isNotEmpty &&
+                                                  palabras.length >= 3)
+                                              ? (palabras.length == 3
+                                                  ? Text(
+                                                      '${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  : Text(
+                                                      '${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}'))
                                               : Text(
-                                                  '${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}'))
-                                          : Text(
-                                              '${_sesionesDelDia[index].hora}')
-                                      : _sesionesDelDia[index].grupo != null &&
-                                              palabras.isNotEmpty &&
-                                              palabras.length >= 3
-                                          ? palabras.length == 3
-                                              ? Text(
-                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  '${_sesionesDelDia[index].hora}')
+                                          : _sesionesDelDia[index].grupo != null &&
+                                                  palabras.isNotEmpty &&
+                                                  palabras.length >= 3
+                                              ? palabras.length == 3
+                                                  ? Text(
+                                                      '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} - ${_sesionesDelDia[index].hora}')
+                                                  : Text(
+                                                      '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}')
                                               : Text(
-                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${palabras[1]} - ${palabras[0]} ${palabras[2]} ${palabras[3]} - ${_sesionesDelDia[index].hora}')
-                                          : Text(
-                                              '${_sesionesDelDia[index].profesional.nombre!} - ${_sesionesDelDia[index].hora}'),
-                                  children: [
-                                    _sesionesDelDia[index].objetivos != ''
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              _sesionesDelDia[index].objetivos,
-                                            ),
-                                          )
-                                        : const Text(
-                                            "No hay contenidos definidos para esta sesión")
-                                  ],
-                                ));
+                                                  '${_sesionesDelDia[index].profesional.nombre!} - ${_sesionesDelDia[index].hora}'),
+                                      children: [
+                                        _sesionesDelDia[index].objetivos != ''
+                                            ? Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  _sesionesDelDia[index].objetivos,
+                                                ),
+                                              )
+                                            : const Text(
+                                                "No hay contenidos definidos para esta sesión"),
+                                      ],
+                                    ),
+
+                            ],
+                          ));
+
                     },
                   ),
           ),

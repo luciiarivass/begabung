@@ -1,7 +1,11 @@
 export 'package:begabung_app/view/screens/notificaciones.dart';
+export 'package:begabung_app/view/screens/valoracion.dart';
 export 'package:begabung_app/view/screens/init.dart';
 export 'package:begabung_app/view/screens/sesiones_admin.dart';
 export 'package:begabung_app/view/screens/home_admin.dart';
+export 'package:begabung_app/view/screens/home_auxiliar.dart';
+export 'package:begabung_app/view/screens/sesiones_auxiliar.dart';
+export 'package:begabung_app/view/screens/sesion_asistencia.dart';
 export 'package:begabung_app/view/screens/grupo.dart';
 export 'package:begabung_app/view/screens/evaluaciones_profesional.dart';
 export 'package:begabung_app/view/screens/sesiones_profesional.dart';

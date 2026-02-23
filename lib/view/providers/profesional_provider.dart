@@ -42,7 +42,7 @@ class ProfesionalProvider extends ChangeNotifier {
       final registro = json.decode(response.body);
       profesional = Profesional.fromJson(registro);
     } else {
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'No se pudo cargar la información del profesional.';
     }
   }
 
@@ -58,7 +58,7 @@ class ProfesionalProvider extends ChangeNotifier {
       grupos =
           registros['grupos'].map<Grupo>((row) => Grupo.fromJson(row)).toList();
     } else {
-      throw 'Error ${responseSesiones.statusCode}: ${responseSesiones.body}';
+      throw 'No se pudieron cargar las sesiones.';
     }
   }
 
@@ -71,7 +71,7 @@ class ProfesionalProvider extends ChangeNotifier {
       evaluaciones =
           registros.map<Evaluacion>((row) => Evaluacion.fromJson(row)).toList();
     } else {
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'No se pudieron cargar las evaluaciones.';
     }
   }
 
@@ -98,13 +98,11 @@ class ProfesionalProvider extends ChangeNotifier {
     });
 
     if (response.statusCode != 200) {
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'No se pudo guardar la evaluación. Inténtalo de nuevo.';
     }
 
     try {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-      // Asignamos el id nuevo a la evaluación local
       evaluacion.idevaluacion = int.parse(jsonResponse['data']['idevaluacion']);
       evaluacion.idsesion = idsesion; 
       evaluacion.fecha = DateFormat('dd-MM-yyyy').format(now);

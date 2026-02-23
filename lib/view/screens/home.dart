@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const SesionesScreen(),
     const EvaluacionesScreen(),
     const NotificacionesScreen(),
-    //const MensajesScreen(),
+    const ValoracionScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -154,12 +154,13 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.notifications),
             label: 'Notificaciones',
           ),
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            label: 'Mensajes',
-          ),*/
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Valoraciones',
+          ),
         ],
         //currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         //onTap: _onItemTapped,
       ),

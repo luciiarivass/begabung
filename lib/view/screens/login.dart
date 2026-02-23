@@ -1,6 +1,7 @@
 import 'package:begabung_app/domain/entities/api.dart';
 import 'package:begabung_app/domain/entities/entities.dart';
 import 'package:begabung_app/view/providers/admin_provider.dart';
+import 'package:begabung_app/view/providers/auxiliar_provider.dart';
 import 'package:begabung_app/view/providers/profesional_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -136,25 +137,44 @@ class __LoginFormState extends State<_LoginForm> {
                 try {
                   login = await login.login(user, password);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Error login: $e"),
-                  ));
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(e.toString()),
+                      backgroundColor: Colors.red.shade700,
+                    ));
+                  }
+                  return;
                 }
                 if (login.mantenimiento) {
                   GoRouter.of(context).go('/mantenimiento');
-                } else if (login.admin || login.auxiliar) {
-                  // ← PRIMERO ADMIN/AUX
+                } else if (login.auxiliar) {
+                  // --- AUXILIAR ---
+                  debugPrint('>>> LOGIN: usuario auxiliar, yendo a /home_auxiliar');
                   const storage = FlutterSecureStorage();
                   await storage.write(key: 'apikey', value: login.apikey);
                   await storage.write(
                       key: 'id', value: login.idlogin.toString());
+
+                  context.read<ProfesionalProvider>().clearInfo();
+                  context.read<AuxiliarProvider>().getInfo();
+
+                  if (context.mounted) {
+                    GoRouter.of(context).go('/home_auxiliar');
+                  }
+                } else if (login.admin) {
+                  // --- ADMIN ---
+                  debugPrint('>>> LOGIN: usuario admin, yendo a /home_admin');
+                  const storage = FlutterSecureStorage();
+                  await storage.write(key: 'apikey', value: login.apikey);
                   await storage.write(
-                      key: 'is_auxiliar', value: login.auxiliar ? '1' : '0');
+                      key: 'id', value: login.idlogin.toString());
 
                   context.read<ProfesionalProvider>().clearInfo();
                   context.read<AdminProvider>().getInfo();
 
-                  GoRouter.of(context).go('/home_admin');
+                  if (context.mounted) {
+                    GoRouter.of(context).go('/home_admin');
+                  }
                 } else if (login.idprofesional != 0) {
                   const storage = FlutterSecureStorage();
                   await storage.write(key: 'apikey', value: login.apikey);
@@ -179,15 +199,17 @@ class __LoginFormState extends State<_LoginForm> {
                   await _initFirebaseMessaging(context, login, alumnos[0])
                       .catchError((e) {
                     print('Error al inicializar Firebase Messaging: $e');
-                    /*if (alumnos.length == 1) {
+                  });
+                  /*if (alumnos.length == 1) {
                     context
                         .read<AlumnoProvider>()
                         .getInfo(alumnos[0].idalumno ?? 0);
                     GoRouter.of(context).go('/home');
                   } else {
                     alumnoProvider.hermanos = true;*/
+                  if (context.mounted) {
                     GoRouter.of(context).go('/hijos', extra: alumnos);
-                  });
+                  }
                 }
               },
               child: const Text('Entrar',

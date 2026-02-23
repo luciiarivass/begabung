@@ -1,12 +1,12 @@
 import 'package:begabung_app/domain/entities/entities.dart';
-import 'package:begabung_app/view/providers/alumno_provider.dart';
-import 'package:begabung_app/view/widgets/calendar_widget.dart';
+import 'package:begabung_app/view/providers/auxiliar_provider.dart';
+import 'package:begabung_app/view/widgets/calendar_auxiliar_widget.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 
-class SesionesScreen extends StatelessWidget {
-  const SesionesScreen({super.key});
+class SesionesAuxiliarScreen extends StatelessWidget {
+  const SesionesAuxiliarScreen({super.key});
+
   List<Sesion> _sesionesCal(List<Sesion> sesiones) {
     List<Sesion> sesionesCal = [];
     for (Sesion sesion in sesiones) {
@@ -18,6 +18,7 @@ class SesionesScreen extends StatelessWidget {
 
         String diaConCeros = dia.toString().padLeft(2, '0');
         String mesConCeros = mes.toString().padLeft(2, '0');
+
         sesion.fecha = '$anio-$mesConCeros-$diaConCeros';
         sesionesCal.add(sesion);
       }
@@ -27,23 +28,24 @@ class SesionesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alumnoProvider = context.watch<AlumnoProvider>();
-    if (alumnoProvider.sesiones.isEmpty) {
-      return const Center(
-          child:
-              CircularProgressIndicator());
+    final auxiliarProvider = context.watch<AuxiliarProvider>();
+
+    if (auxiliarProvider.sesiones.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
     }
-    List<Sesion> sesiones = _sesionesCal(alumnoProvider.sesiones);
+
+    List<Sesion> sesiones = _sesionesCal(auxiliarProvider.sesiones);
+
     return Stack(children: [
       Column(
         children: [
           const SizedBox(height: 10),
-          const Center(child: Text('Sesiones', style: TextStyle(fontSize: 24))),
+          const Center(
+              child: Text('Sesiones', style: TextStyle(fontSize: 24))),
           const SizedBox(height: 10),
           Expanded(
-              child: CalendarWidget(
-            sesiones,
-          )),
+            child: CalendarAuxiliarWidget(sesiones),
+          ),
         ],
       ),
     ]);

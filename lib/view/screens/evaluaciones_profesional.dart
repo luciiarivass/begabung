@@ -66,8 +66,6 @@ class _EvaluacionesProfesionalScreenState
                               setState(() {
                                 loading = true;
                               });
-
-                              // Cargamos evaluaciones si las necesitas más adelante
                               await context
                                   .read<ProfesionalProvider>()
                                   .getEvaluaciones();
@@ -78,9 +76,6 @@ class _EvaluacionesProfesionalScreenState
 
                               final grupoSeleccionado =
                                   profesionalProvider.grupos[index];
-
-                              // 👉 Ahora NO vamos a /grupo
-                              // 👉 Vamos a la pantalla intermedia de sesiones
                               context.push(
                                 '/sesiones-grupo',
                                 extra: {
