@@ -1,4 +1,5 @@
 import 'package:begabung_app/view/providers/alumno_provider.dart';
+import 'package:begabung_app/view/screens/recurso_screen.dart';
 import 'package:begabung_app/view/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,11 +17,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // Aquí defines tus pantallas
   final List<Widget> _pages = [
     const SesionesScreen(),
     const EvaluacionesScreen(),
-    const NotificacionesScreen(),
+    const RecursosScreen(),
     const ValoracionScreen(),
   ];
 
@@ -107,6 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            tooltip: 'Notificaciones',
+            onPressed: () {
+              GoRouter.of(context).push('/notificaciones');
+            },
+          ),
           PopupMenuButton<int>(
             offset: const Offset(0, 50),
             onSelected: (int value) async {
@@ -151,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Evaluaciones',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notificaciones',
+            icon: Icon(Icons.menu_book),
+            label: 'Recursos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star),

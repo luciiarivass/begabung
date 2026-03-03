@@ -30,7 +30,6 @@ class SesionesAdminScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final adminProvider = context.watch<AdminProvider>();
-    // Verificamos si las sesiones están cargadas
     if (adminProvider.sesiones.isEmpty) {
       return const Center(
           child:

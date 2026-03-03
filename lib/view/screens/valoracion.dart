@@ -12,20 +12,26 @@ class ValoracionScreen extends StatefulWidget {
 }
 
 class _ValoracionScreenState extends State<ValoracionScreen> {
-  DateTime _parseDate(String fecha) {
-    final p = fecha.split('-');
-    if (p[0].length == 4) {
-      return DateTime(int.parse(p[0]), int.parse(p[1]), int.parse(p[2]));
-    } else {
-      return DateTime(int.parse(p[2]), int.parse(p[1]), int.parse(p[0]));
-    }
-  }
+  String _formatearFecha(String? fecha) {
 
-  String _fechaLegible(String fecha) {
-    final d = _parseDate(fecha);
-    return '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
-  }
+  if (fecha == null || fecha.isEmpty) return '';
+  final parts = fecha.split('-');
+  if (parts.length != 3) return fecha;
 
+  // Backend viene como DD-MM-AAAA
+  return '${parts[0]}/${parts[1]}/${parts[2]}';
+}
+DateTime _parseDate(String fecha) {
+  final parts = fecha.split('-');
+  if (parts.length != 3) return DateTime.now();
+
+  // DD-MM-AAAA
+  return DateTime(
+    int.parse(parts[2]), // año
+    int.parse(parts[1]), // mes
+    int.parse(parts[0]), // día
+  );
+}
   List<Sesion> _sesionesConFecha(List<Sesion> sesiones) =>
       sesiones.where((s) => s.fecha != null).toList();
 
@@ -38,8 +44,8 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Sesión ya valorada'),
-          content: const Text(
-              'Ya has enviado una valoración para esta sesión.'),
+          content:
+              const Text('Ya has enviado una valoración para esta sesión.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -54,13 +60,18 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
     int estrellasProfe = 5;
     int estrellasActividad = 5;
     final TextEditingController obsController = TextEditingController();
-    final fechaLegible = _fechaLegible(sesion.fecha!);
 
     showDialog(
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (ctx, setD) => AlertDialog(
-          title: Text('Sesión del $fechaLegible'),
+          title: Text(
+            'Sesión del ${_formatearFecha(sesion.fecha)}',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -70,15 +81,19 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Row(
-                  children: List.generate(5, (i) => IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: Icon(
-                      i < estrellasProfe ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                    ),
-                    onPressed: () => setD(() => estrellasProfe = i + 1),
-                  )),
+                  children: List.generate(
+                      5,
+                      (i) => IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: Icon(
+                              i < estrellasProfe
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () => setD(() => estrellasProfe = i + 1),
+                          )),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -86,15 +101,20 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Row(
-                  children: List.generate(5, (i) => IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: Icon(
-                      i < estrellasActividad ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                    ),
-                    onPressed: () => setD(() => estrellasActividad = i + 1),
-                  )),
+                  children: List.generate(
+                      5,
+                      (i) => IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: Icon(
+                              i < estrellasActividad
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () =>
+                                setD(() => estrellasActividad = i + 1),
+                          )),
                 ),
                 const SizedBox(height: 16),
                 const Text('Propón tu siguiente reto Begabung:',
@@ -119,18 +139,19 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
             TextButton(
               onPressed: () async {
                 Navigator.of(ctx).pop();
-                final error = await context.read<AlumnoProvider>().guardarFeedback(
-                  idsesion: sesion.idsesion ?? 0,
-                  idgrupo: sesion.idgrupo ?? 0,
-                  idprofesional: sesion.idprofesional ?? 0,
-                  notaProfe: estrellasProfe,
-                  notaSesion: estrellasActividad,
-                  observaciones: obsController.text,
-                );
+                final error =
+                    await context.read<AlumnoProvider>().guardarFeedback(
+                          idsesion: sesion.idsesion ?? 0,
+                          idgrupo: sesion.idgrupo ?? 0,
+                          idprofesional: sesion.idprofesional ?? 0,
+                          notaProfe: estrellasProfe,
+                          notaSesion: estrellasActividad,
+                          observaciones: obsController.text,
+                        );
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(error == null
-                        ? '✅ Valoración guardada correctamente'
+                        ? 'Valoración guardada correctamente'
                         : '⚠️ $error'),
                     duration: const Duration(seconds: 4),
                   ));
@@ -158,7 +179,8 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
     DateTime focusedDay = DateTime.now();
     DateTime? selectedDay = focusedDay;
     List<Sesion> sesionesDelDia = sesionesPorDia[
-            DateTime(focusedDay.year, focusedDay.month, focusedDay.day)] ?? [];
+            DateTime(focusedDay.year, focusedDay.month, focusedDay.day)] ??
+        [];
 
     showDialog(
       context: context,
@@ -174,7 +196,8 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Selecciona una sesión',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.of(ctx).pop(),
@@ -194,17 +217,19 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                 focusedDay: focusedDay,
                 selectedDayPredicate: (day) => isSameDay(selectedDay, day),
                 calendarStyle: const CalendarStyle(
-                  markerDecoration: BoxDecoration(
-                      color: Colors.blue, shape: BoxShape.circle),
+                  markerDecoration:
+                      BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
                 ),
                 eventLoader: (day) =>
-                    sesionesPorDia[DateTime(day.year, day.month, day.day)] ?? [],
+                    sesionesPorDia[DateTime(day.year, day.month, day.day)] ??
+                    [],
                 onDaySelected: (selDay, focDay) {
                   setD(() {
                     selectedDay = selDay;
                     focusedDay = focDay;
                     sesionesDelDia = sesionesPorDia[
-                            DateTime(selDay.year, selDay.month, selDay.day)] ?? [];
+                            DateTime(selDay.year, selDay.month, selDay.day)] ??
+                        [];
                   });
                 },
                 onPageChanged: (focDay) => focusedDay = focDay,
@@ -218,7 +243,8 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                         itemCount: sesionesDelDia.length,
                         itemBuilder: (_, i) {
                           final s = sesionesDelDia[i];
-                          final evaluada = sesionesEvaluadas.contains(s.idsesion);
+                          final evaluada =
+                              sesionesEvaluadas.contains(s.idsesion);
                           return ListTile(
                             leading: Icon(
                               evaluada ? Icons.check_circle : Icons.event,
@@ -252,11 +278,13 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
 
   Widget _estrellitas(int? n) => Row(
         mainAxisSize: MainAxisSize.min,
-        children: List.generate(5, (i) => Icon(
-          i < (n ?? 0) ? Icons.star : Icons.star_border,
-          color: Colors.amber,
-          size: 16,
-        )),
+        children: List.generate(
+            5,
+            (i) => Icon(
+                  i < (n ?? 0) ? Icons.star : Icons.star_border,
+                  color: Colors.amber,
+                  size: 16,
+                )),
       );
 
   @override
@@ -266,7 +294,6 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
 
     return Stack(
       children: [
-    
         if (feedbacks.isEmpty)
           Center(
             child: Column(
@@ -301,26 +328,28 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (f.fecha != null)
-                        Text('Sesión del ${f.fecha}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15)),
+                        Text(
+                          'Sesión del ${_formatearFecha(f.fecha)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                       const SizedBox(height: 8),
                       Row(children: [
-                        const SizedBox(width: 80,
+                        const SizedBox(
+                            width: 80,
                             child: Text('Profe:',
                                 style: TextStyle(fontWeight: FontWeight.w600))),
                         _estrellitas(f.notaProfesional),
-                        Text(' (${f.notaProfesional ?? '-'}/5)',
-                            style: const TextStyle(color: Colors.grey, fontSize: 12)),
                       ]),
                       const SizedBox(height: 4),
                       Row(children: [
-                        const SizedBox(width: 80,
+                        const SizedBox(
+                            width: 80,
                             child: Text('Sesión:',
                                 style: TextStyle(fontWeight: FontWeight.w600))),
                         _estrellitas(f.notaSesion),
-                        Text(' (${f.notaSesion ?? '-'}/5)',
-                            style: const TextStyle(color: Colors.grey, fontSize: 12)),
                       ]),
                       if (f.observaciones != null &&
                           f.observaciones!.isNotEmpty) ...[
@@ -328,7 +357,8 @@ class _ValoracionScreenState extends State<ValoracionScreen> {
                         const Text('Mi reto:',
                             style: TextStyle(fontWeight: FontWeight.w600)),
                         Text(f.observaciones!,
-                            style: const TextStyle(fontStyle: FontStyle.italic)),
+                            style:
+                                const TextStyle(fontStyle: FontStyle.italic)),
                       ],
                     ],
                   ),

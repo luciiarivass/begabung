@@ -87,6 +87,13 @@ class _HomeProfesionalScreenState extends State<HomeProfesionalScreen> {
         title: Text(profesionalProvider.profesional?.nombre ?? ''),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            tooltip: 'Notificaciones',
+            onPressed: () {
+              GoRouter.of(context).push('/notificaciones');
+            },
+          ),
           PopupMenuButton<int>(
             offset: const Offset(0, 50),
             onSelected: (int value) async {

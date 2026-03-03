@@ -119,5 +119,9 @@ final appRouter = GoRouter(
           //return HijosScreen(alumnos: alumnos);
           return HijosScreen();
         }),
+    GoRoute(
+      path: '/notificaciones',
+      builder: (context, state) => const NotificacionesScreen(),
+    ),
   ],
 );

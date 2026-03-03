@@ -23,10 +23,10 @@ class _InitScreenState extends State<InitScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final needsUpdate = await _checkVersion();
-      if (!needsUpdate) {
-        await _checkLogin(); // solo si no hay update bloqueante
-      }
+      // final needsUpdate = await _checkVersion();
+      // if (!needsUpdate) {
+        await _checkLogin();
+      // }
     });
   }
 

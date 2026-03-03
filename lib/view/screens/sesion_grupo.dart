@@ -61,7 +61,6 @@ class _SesionesGrupoScreenState extends State<SesionesGrupoScreen> {
       ),
       body: Column(
         children: [
-          // ✅ Filtro por estado (sin calendario)
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
             child: Row(

@@ -16,7 +16,6 @@ class AlumnoProvider extends ChangeNotifier {
   List<Feedback> feedbacks = [];
   Set<int> sesionesEvaluadas = {};
 
-  /// GET con reintentos automáticos ante 429 o errores de conexión.
   Future<http.Response> _getWithRetry(Uri url, String apikey,
       {int maxRetries = 5}) async {
     int delayMs = 1000;
@@ -177,10 +176,7 @@ class AlumnoProvider extends ChangeNotifier {
       },
     );
 
-    print('POST /feedback → ${response.statusCode}: ${response.body}');
-
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // Recargar feedbacks
       await getFeedbacks(apikey);
       notifyListeners();
       return null;
