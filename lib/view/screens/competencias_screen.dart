@@ -84,20 +84,18 @@ class _CompetenciasScreenState extends State<CompetenciasScreen> {
       );
     }
 
-    // Agrupar recursos publicados por idinteligencia
     final Map<int?, List> grouped = {};
 
     for (final r in provider.recursosAlumno) {
       if (r.publicado != true) continue;
-      final key = r.idinteligencia; // puede ser null → "Sin inteligencia"
-      grouped.putIfAbsent(key, () => []).add(r);
+      grouped.putIfAbsent(r.idinteligencia, () => []).add(r);
     }
 
     if (grouped.isEmpty) {
       return _buildEmpty(colorScheme);
     }
 
-    // Construir lista de entradas: (id, nombre, recursos)
+
     final entries = grouped.entries.map((e) {
       final id = e.key;
       final nombre =
@@ -173,9 +171,6 @@ class _CompetenciasScreenState extends State<CompetenciasScreen> {
   }
 }
 
-// ─────────────────────────────────────────────
-// Modelo auxiliar de entrada
-// ─────────────────────────────────────────────
 class _InteligenciaEntry {
   final int? id;
   final String nombre;
@@ -188,9 +183,6 @@ class _InteligenciaEntry {
   });
 }
 
-// ─────────────────────────────────────────────
-// Tarjeta individual de inteligencia
-// ─────────────────────────────────────────────
 class _InteligenciaCard extends StatelessWidget {
   final _InteligenciaEntry entry;
   final VoidCallback onTap;
@@ -227,7 +219,6 @@ class _InteligenciaCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icono con fondo semitransparente
                 Container(
                   width: 44,
                   height: 44,
@@ -238,7 +229,6 @@ class _InteligenciaCard extends StatelessWidget {
                   child: Icon(icon, color: Colors.white, size: 24),
                 ),
                 const Spacer(),
-                // Nombre
                 Text(
                   entry.nombre,
                   style: const TextStyle(
@@ -251,7 +241,6 @@ class _InteligenciaCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-                // Badge con número de recursos
                 Row(
                   children: [
                     Container(

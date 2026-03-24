@@ -131,7 +131,7 @@ class AlumnoProvider extends ChangeNotifier {
     } else {
       print(
           ' getAlumnoNotificaciones → ${response.statusCode}: ${response.body}');
-      throw 'Error ${response.statusCode}: ${response.body}';
+      throw 'Errr ${response.statusCode}: ${response.body}';
     }
   }
 
