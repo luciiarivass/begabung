@@ -5,7 +5,10 @@ class Competencia {
   Competencia();
 
   Competencia.fromJson(Map<String, dynamic> json) {
-    idcompetencia = int.parse(json['idcompetencia']);
-    nombre = json['nombre'];
+    // La API de inteligencias devuelve 'idinteligencia', la de competencias 'idcompetencia'
+    final rawId = json['idinteligencia'] ?? json['idcompetencia'];
+    idcompetencia = rawId != null ? int.tryParse(rawId.toString()) : null;
+    nombre = json['nombre']?.toString() ?? '';
   }
+  
 }

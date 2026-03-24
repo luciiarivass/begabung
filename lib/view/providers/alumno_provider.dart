@@ -9,7 +9,7 @@ class AlumnoProvider extends ChangeNotifier {
   Alumno? alumno;
   bool hermanos = false;
   String? grupo;
-  String? competencia;
+  String? competencias;
   List<Sesion> sesiones = [];
   List<Evaluacion> evaluaciones = [];
   List<Notificacion> notificaciones = [];
@@ -24,19 +24,20 @@ class AlumnoProvider extends ChangeNotifier {
         final response = await http.get(url, headers: {'Token': apikey});
         if (response.statusCode != 429) return response;
         if (attempt == maxRetries) return response;
-        print('⚠️ 429 → reintento ${attempt + 1}/$maxRetries en ${delayMs}ms ($url)');
+        print(
+            '⚠️ 429 → reintento ${attempt + 1}/$maxRetries en ${delayMs}ms ($url)');
       } catch (e) {
         if (attempt == maxRetries) rethrow;
-        print('⚠️ Error de red ($e) → reintento ${attempt + 1}/$maxRetries en ${delayMs}ms');
+        print(
+            '⚠️ Error de red ($e) → reintento ${attempt + 1}/$maxRetries en ${delayMs}ms');
       }
       await Future.delayed(Duration(milliseconds: delayMs));
       delayMs = (delayMs * 2).clamp(0, 30000);
     }
     throw 'Error inesperado en _getWithRetry';
   }
-  
-/// COMPROBAR QUE PASA CON EL INICIO DE SESION COMO ALUMNO 
 
+  /// COMPROBAR QUE PASA CON EL INICIO DE SESION COMO ALUMNO
 
   Future<void> getInfo(int idalumno, {bool force = false}) async {
     const storage = FlutterSecureStorage();
@@ -61,13 +62,14 @@ class AlumnoProvider extends ChangeNotifier {
     await getFeedbacks(apikey);
     notifyListeners();
 
-    print(' getInfo completado: ${alumno?.nombre}, ${sesiones.length} sesiones');
+    print(
+        ' getInfo completado: ${alumno?.nombre}, ${sesiones.length} sesiones');
   }
 
   void clearInfo() {
     alumno = null;
     grupo = null;
-    competencia = null;
+    competencias = null;
     sesiones = [];
     evaluaciones = [];
     notificaciones = [];
@@ -76,6 +78,7 @@ class AlumnoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+ 
   Future<void> getAlumnoInfo(int idalumno, String? apikey) async {
     final url = Uri.parse('${Api.base}/api/3/alumnos/$idalumno');
     final response = await _getWithRetry(url, apikey!);
@@ -110,7 +113,8 @@ class AlumnoProvider extends ChangeNotifier {
       evaluaciones =
           registros.map<Evaluacion>((row) => Evaluacion.fromJson(row)).toList();
     } else {
-      print(' getAlumnoEvaluaciones → ${response.statusCode}: ${response.body}');
+      print(
+          ' getAlumnoEvaluaciones → ${response.statusCode}: ${response.body}');
       throw 'Error ${response.statusCode}: ${response.body}';
     }
   }
@@ -125,7 +129,8 @@ class AlumnoProvider extends ChangeNotifier {
           .map<Notificacion>((row) => Notificacion.fromJson(row))
           .toList();
     } else {
-      print(' getAlumnoNotificaciones → ${response.statusCode}: ${response.body}');
+      print(
+          ' getAlumnoNotificaciones → ${response.statusCode}: ${response.body}');
       throw 'Error ${response.statusCode}: ${response.body}';
     }
   }
@@ -137,13 +142,11 @@ class AlumnoProvider extends ChangeNotifier {
     print('GET /feedback → ${response.statusCode}');
     if (response.statusCode == 200) {
       final registros = json.decode(response.body);
-      feedbacks = registros
-          .map<Feedback>((row) => Feedback.fromJson(row))
-          .toList();
+      feedbacks =
+          registros.map<Feedback>((row) => Feedback.fromJson(row)).toList();
       sesionesEvaluadas = feedbacks.map((f) => f.idsesion ?? -1).toSet();
     }
   }
-
 
   Future<String?> guardarFeedback({
     required int idsesion,
@@ -183,7 +186,9 @@ class AlumnoProvider extends ChangeNotifier {
     }
     try {
       final decoded = json.decode(response.body);
-      return decoded['message'] ?? decoded['error'] ?? 'Error ${response.statusCode}';
+      return decoded['message'] ??
+          decoded['error'] ??
+          'Error ${response.statusCode}';
     } catch (_) {
       return 'Error ${response.statusCode}: ${response.body}';
     }

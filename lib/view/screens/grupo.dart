@@ -144,7 +144,7 @@ class _GrupoScreenState extends State<GrupoScreen> {
                               evaluacion.idsesion = idsesion;
 
                               await profesionalProvider.guardarEvaluacion(
-                                  evaluacion, idsesion);
+                                  evaluacion);
 
                               if (mounted) setState(() {});
                             },

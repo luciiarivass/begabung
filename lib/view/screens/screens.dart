@@ -18,3 +18,5 @@ export 'package:begabung_app/view/screens/hijos.dart';
 export 'package:begabung_app/view/screens/sesiones.dart';
 export 'package:begabung_app/view/screens/login.dart';
 export 'package:begabung_app/view/screens/mantenimiento.dart';
+export 'package:begabung_app/view/screens/recursos_profesional_screen.dart';
+export 'package:begabung_app/view/screens/recursos_alumno_screen.dart';

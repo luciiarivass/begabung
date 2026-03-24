@@ -20,6 +20,7 @@ class _HomeProfesionalScreenState extends State<HomeProfesionalScreen> {
   final List<Widget> _pages = [
     const SesionesProfesionalScreen(),
     const EvaluacionesProfesionalScreen(),
+    const RecursosProfesionalScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -87,13 +88,6 @@ class _HomeProfesionalScreenState extends State<HomeProfesionalScreen> {
         title: Text(profesionalProvider.profesional?.nombre ?? ''),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            tooltip: 'Notificaciones',
-            onPressed: () {
-              GoRouter.of(context).push('/notificaciones');
-            },
-          ),
           PopupMenuButton<int>(
             offset: const Offset(0, 50),
             onSelected: (int value) async {
@@ -136,6 +130,10 @@ class _HomeProfesionalScreenState extends State<HomeProfesionalScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.assignment),
             label: 'Evaluaciones',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: 'Recursos',
           ),
         ],
         selectedItemColor: Theme.of(context).colorScheme.primary,

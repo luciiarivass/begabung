@@ -17,7 +17,6 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
   final List<Widget> _pages = [
     const SesionesAdminScreen(),
   ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

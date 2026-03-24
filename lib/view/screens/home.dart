@@ -1,5 +1,8 @@
+import 'package:begabung_app/domain/entities/alumno.dart';
 import 'package:begabung_app/view/providers/alumno_provider.dart';
-import 'package:begabung_app/view/screens/recurso_screen.dart';
+import 'package:begabung_app/view/providers/recurso_provider.dart';
+import 'package:begabung_app/view/screens/competencias_screen.dart';
+import 'package:begabung_app/view/screens/recursos_alumno_screen.dart';
 import 'package:begabung_app/view/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     const SesionesScreen(),
     const EvaluacionesScreen(),
-    const RecursosScreen(),
+    const _RecursosTab(),   // ← gestiona su propia navegación interna
     const ValoracionScreen(),
   ];
 
@@ -124,6 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 case 2:
                   const storage = FlutterSecureStorage();
                   await storage.deleteAll();
+
+                  context.read<RecursoProvider>().clearRecursos();
+
                   GoRouter.of(context).go('/');
                   break;
               }
@@ -166,11 +172,48 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Valoraciones',
           ),
         ],
-        //currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
-        //onTap: _onItemTapped,
       ),
+    );
+  }
+}
+
+/// Widget que gestiona la navegación interna del tab Recursos:
+/// Competencias → RecursosAlumno, sin salir del Scaffold de HomeScreen.
+class _RecursosTab extends StatefulWidget {
+  const _RecursosTab();
+
+  @override
+  State<_RecursosTab> createState() => _RecursosTabState();
+}
+
+class _RecursosTabState extends State<_RecursosTab> {
+  int? _idInteligencia;
+  String? _nombreInteligencia;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_idInteligencia != null) {
+      final alumno = context.read<AlumnoProvider>().alumno!;
+      return RecursosAlumnoScreen(
+        alumno: alumno,
+        idinteligencia: _idInteligencia,
+        nombreInteligencia: _nombreInteligencia,
+        onBack: () => setState(() {
+          _idInteligencia = null;
+          _nombreInteligencia = null;
+        }),
+      );
+    }
+
+    return CompetenciasScreen(
+      onSelectInteligencia: (id, nombre) {
+        setState(() {
+          _idInteligencia = id;
+          _nombreInteligencia = nombre;
+        });
+      },
     );
   }
 }

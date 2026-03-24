@@ -12,6 +12,8 @@ class ProfesionalProvider extends ChangeNotifier {
   List<Grupo> grupos = [];
   List<Evaluacion> evaluaciones = [];
 
+  get profesionalProvider => null;
+
   Future<void> getInfo(int idprofesional) async {
     const storage = FlutterSecureStorage();
     String? apikey = await storage.read(key: 'apikey');
@@ -46,6 +48,7 @@ class ProfesionalProvider extends ChangeNotifier {
     }
   }
 
+
   Future<void> getProfesionalSesiones(String? apikey) async {
     var url = Uri.parse(
         '${Api.base}/api/3/sesionesporid?idprofesional=${profesional?.idprofesional}');
@@ -75,7 +78,7 @@ class ProfesionalProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> guardarEvaluacion(Evaluacion evaluacion, int idsesion) async {
+  Future<void> guardarEvaluacion(Evaluacion evaluacion) async {
     const storage = FlutterSecureStorage();
     String? apikey = await storage.read(key: 'apikey');
     DateTime now = DateTime.now();
@@ -84,7 +87,7 @@ class ProfesionalProvider extends ChangeNotifier {
     var response = await http.post(url, headers: {
       'Token': apikey!
     }, body: {
-      'idsesion': idsesion.toString(),
+      'idsesion': evaluacion.idsesion.toString(),
       'idprofesional': evaluacion.idprofesional.toString(),
       'idinteligencia': evaluacion.idcompetencia.toString(),
       'idalumno': evaluacion.idalumno.toString(),
@@ -104,11 +107,9 @@ class ProfesionalProvider extends ChangeNotifier {
     try {
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       evaluacion.idevaluacion = int.parse(jsonResponse['data']['idevaluacion']);
-      evaluacion.idsesion = idsesion; 
+      evaluacion.idsesion = int.parse(jsonResponse['data']['idsesion']); 
       evaluacion.fecha = DateFormat('dd-MM-yyyy').format(now);
       evaluaciones.insert(0, evaluacion);
-      notifyListeners();
-
       notifyListeners();
     } catch (e) {
       print(e);

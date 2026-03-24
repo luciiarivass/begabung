@@ -1,4 +1,5 @@
 import 'package:begabung_app/domain/entities/entities.dart';
+import 'package:begabung_app/view/screens/competencias_screen.dart';
 //import 'package:begabung_app/view/providers/admin_provider.dart';
 //import 'package:begabung_app/view/providers/profesional_provider.dart';
 import 'package:begabung_app/view/screens/home_auxiliar.dart';
@@ -79,31 +80,30 @@ final appRouter = GoRouter(
       builder: (context, state) => HomeAuxiliarScreen(),
     ),
     GoRoute(
-  path: '/sesiones-grupo',
-  builder: (context, state) {
-    final extra = state.extra as Map<String, dynamic>;
-    final grupo = extra['grupo'] as Grupo;
+      path: '/sesiones-grupo',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final grupo = extra['grupo'] as Grupo;
 
-    return SesionesGrupoScreen(
-      grupo: grupo,
-    );
-  },
-),
+        return SesionesGrupoScreen(
+          grupo: grupo,
+        );
+      },
+    ),
+    GoRoute(
+      name: GrupoScreen.route,
+      path: '/grupo',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final grupo = extra['grupo'] as Grupo;
+        final sesion = extra['sesion'] as Sesion;
 
-   GoRoute(
-  name: GrupoScreen.route,
-  path: '/grupo',
-  builder: (context, state) {
-    final extra = state.extra as Map<String, dynamic>;
-    final grupo = extra['grupo'] as Grupo;
-    final sesion = extra['sesion'] as Sesion;
-
-    return GrupoScreen(
-      grupo: grupo,
-      idsesion: sesion.idsesion ?? 0,
-    );
-  },
-),
+        return GrupoScreen(
+          grupo: grupo,
+          idsesion: sesion.idsesion ?? 0,
+        );
+      },
+    ),
     GoRoute(
         name: EvaluacionScreen.route,
         path: '/evaluacion',
@@ -122,6 +122,24 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/notificaciones',
       builder: (context, state) => const NotificacionesScreen(),
+    ),
+    GoRoute(
+      path: '/competencias',
+      builder: (context, state) => const CompetenciasScreen(),
+    ),
+    GoRoute(
+      path: '/recursos-alumno',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        final alumno = extra['alumno'] as Alumno;
+        final idinteligencia = extra['idinteligencia'] as int?;
+        final nombre = extra['nombre'] as String?;
+        return RecursosAlumnoScreen(
+          alumno: alumno,
+          idinteligencia: idinteligencia,
+          nombreInteligencia: nombre,
+        );
+      },
     ),
   ],
 );

@@ -64,9 +64,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final profesionalProvider = context.watch<ProfesionalProvider>();
-    return Scaffold(
-      body: Column(
+    final profesionalProvider = context.read<ProfesionalProvider>();
+    return Column(
         children: [
           TableCalendar(
             locale: 'es_ES',
@@ -234,8 +233,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     },
                   ),
           ),
-        ],
-      ),
+        ], 
     );
   }
 }

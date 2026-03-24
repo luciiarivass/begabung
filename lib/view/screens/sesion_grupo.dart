@@ -137,24 +137,19 @@ class _SesionesGrupoScreenState extends State<SesionesGrupoScreen> {
   }
 }
 
-/// ✅ Parse de fecha robusto (acepta yyyy-MM-dd, yyyy-MM-dd HH:mm:ss, dd-MM-yyyy, dd/MM/yyyy)
 DateTime? parseFechaFlexible(String? raw) {
   if (raw == null) return null;
   final s = raw.trim();
   if (s.isEmpty) return null;
 
-  // ISO: yyyy-MM-dd o yyyy-MM-dd HH:mm:ss
   final isoCandidate = s.replaceFirst(' ', 'T');
   try {
     return DateTime.parse(isoCandidate);
   } catch (_) {}
-
-  // dd-MM-yyyy
   try {
     return DateFormat('dd-MM-yyyy').parseStrict(s);
   } catch (_) {}
 
-  // dd/MM/yyyy
   try {
     return DateFormat('dd/MM/yyyy').parseStrict(s);
   } catch (_) {}
@@ -162,7 +157,6 @@ DateTime? parseFechaFlexible(String? raw) {
   return null;
 }
 
-/// ✅ Para ordenar: fecha + si hay hora "16:30" la suma
 DateTime fechaOrdenSesion(Sesion sesion) {
   final dt = parseFechaFlexible(sesion.fecha);
   if (dt == null) return DateTime.fromMillisecondsSinceEpoch(0);
@@ -179,19 +173,16 @@ DateTime fechaOrdenSesion(Sesion sesion) {
   return dt;
 }
 
-/// ✅ DD/MM/yyyy para mostrar
 String formatFechaFlexible(String? fecha) {
   final dt = parseFechaFlexible(fecha);
   if (dt == null) return (fecha ?? '');
   return DateFormat('dd/MM/yyyy').format(dt);
 }
 
-/// ✅ deja la hora en HH:mm si viene con segundos o raro
 String formatHoraSoloHHmm(String? hora) {
   if (hora == null) return '';
   final s = hora.trim();
   if (s.isEmpty) return '';
-  // si viene "16:30:00" -> "16:30"
   final parts = s.split(':');
   if (parts.length >= 2) return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
   return s;

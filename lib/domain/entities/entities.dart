@@ -8,3 +8,4 @@ export 'package:begabung_app/domain/entities/familia.dart';
 export 'package:begabung_app/domain/entities/login.dart';
 export 'package:begabung_app/domain/entities/profesional.dart';
 export 'package:begabung_app/domain/entities/sesion.dart';
+export 'package:begabung_app/domain/entities/recursos.dart';
